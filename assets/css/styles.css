@@ -124,7 +124,7 @@ body {
 /* Imagen del Logo (el ícono) */
 .logo-imagen {
     /* Un tamaño más apropiado para un header (ej. 50px-60px) */
-    height: 150px; 
+    height: 60px; 
     width: auto; 
     display: block;
     
