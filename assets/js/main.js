@@ -142,6 +142,7 @@ const AFILIADOS = {
     FUNNEL: "https://funnel.io/",
     DATABOX: "https://databox.com/",
     LOOKERSTUDIO: "https://lookerstudio.google.com/",
+    KEYWORD: "https://keyword.com/",
 
 };
 
