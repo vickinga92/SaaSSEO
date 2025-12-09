@@ -1,0 +1,37 @@
+name: Generate and Deploy Sitemap
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+      - uses: actions/checkout@v4
+
+      - name: Generate sitemap.xml
+        run: |
+          echo '<?xml version="1.0" encoding="UTF-8"?>' > sitemap.xml
+          echo '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' >> sitemap.xml
+
+          # Rutas de tu web SaaSSEO
+          echo '  <url><loc>https://vickinga92.github.io/SaaSSEO/</loc></url>' >> sitemap.xml
+          echo '  <url><loc>https://vickinga92.github.io/SaaSSEO/servicios.html</loc></url>' >> sitemap.xml
+          echo '  <url><loc>https://vickinga92.github.io/SaaSSEO/precios.html</loc></url>' >> sitemap.xml
+          echo '  <url><loc>https://vickinga92.github.io/SaaSSEO/contacto.html</loc></url>' >> sitemap.xml
+
+          echo '</urlset>' >> sitemap.xml
+
+      - name: Add .nojekyll
+        run: echo "" > .nojekyll
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: .
