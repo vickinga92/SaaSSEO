@@ -1,37 +1,34 @@
-name: Generate and Deploy Sitemap
+name: Generate Sitemap for SaaSSEO
 
 on:
   push:
     branches:
-      - main
-  workflow_dispatch:
+      - main  # ajusta si tu rama principal se llama diferente
 
 jobs:
-  deploy:
+  generate-sitemap:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout repository
-      - uses: actions/checkout@v4
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20' # versión estable de Node
+
+      - name: Install sitemap generator
+        run: npm install -g sitemap-generator-cli
 
       - name: Generate sitemap.xml
         run: |
-          echo '<?xml version="1.0" encoding="UTF-8"?>' > sitemap.xml
-          echo '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' >> sitemap.xml
+          sitemap-generator https://vickinga92.github.io/SaaSSEO/ --output ./sitemap.xml --changefreq weekly --priority 0.8 --verbose
 
-          # Rutas de tu web SaaSSEO
-          echo '  <url><loc>https://vickinga92.github.io/SaaSSEO/</loc></url>' >> sitemap.xml
-          echo '  <url><loc>https://vickinga92.github.io/SaaSSEO/servicios.html</loc></url>' >> sitemap.xml
-          echo '  <url><loc>https://vickinga92.github.io/SaaSSEO/precios.html</loc></url>' >> sitemap.xml
-          echo '  <url><loc>https://vickinga92.github.io/SaaSSEO/contacto.html</loc></url>' >> sitemap.xml
-
-          echo '</urlset>' >> sitemap.xml
-
-      - name: Add .nojekyll
-        run: echo "" > .nojekyll
-
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: .
+      - name: Commit and push sitemap.xml
+        run: |
+          git config --local user.name "github-actions[bot]"
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git add sitemap.xml
+          git commit -m "Update sitemap.xml"
+          git push
+        continue-on-error: true
